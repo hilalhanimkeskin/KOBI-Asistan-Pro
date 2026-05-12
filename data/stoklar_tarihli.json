@@ -1,0 +1,302 @@
+[
+    {
+        "urun_id": "URN-100",
+        "urun_adi": "Süzme Çiçek Balı",
+        "kategori": "Gıda",
+        "stok_miktari": 15,
+        "stok_esigi": 10,
+        "birim_fiyat": 450,
+        "birim": "KG",
+        "stoga_giris_tarihi": "2026-03-28"
+    },
+    {
+        "urun_id": "URN-101",
+        "urun_adi": "Soğuk Sıkım Zeytinyağı",
+        "kategori": "Gıda",
+        "stok_miktari": 8,
+        "stok_esigi": 15,
+        "birim_fiyat": 750,
+        "birim": "Litre",
+        "stoga_giris_tarihi": "2026-04-30"
+    },
+    {
+        "urun_id": "URN-102",
+        "urun_adi": "Köy Peyniri (İnek)",
+        "kategori": "Gıda",
+        "stok_miktari": 4,
+        "stok_esigi": 10,
+        "birim_fiyat": 320,
+        "birim": "KG",
+        "stoga_giris_tarihi": "2026-05-06"
+    },
+    {
+        "urun_id": "URN-103",
+        "urun_adi": "Kurutulmuş Domates",
+        "kategori": "Gıda",
+        "stok_miktari": 25,
+        "stok_esigi": 5,
+        "birim_fiyat": 180,
+        "birim": "Paket",
+        "stoga_giris_tarihi": "2026-03-21"
+    },
+    {
+        "urun_id": "URN-104",
+        "urun_adi": "Ev Yapımı Tarhana",
+        "kategori": "Gıda",
+        "stok_miktari": 40,
+        "stok_esigi": 10,
+        "birim_fiyat": 210,
+        "birim": "KG",
+        "stoga_giris_tarihi": "2026-04-20"
+    },
+    {
+        "urun_id": "URN-105",
+        "urun_adi": "Organik Nar Ekşisi",
+        "kategori": "Gıda",
+        "stok_miktari": 12,
+        "stok_esigi": 8,
+        "birim_fiyat": 380,
+        "birim": "Şişe",
+        "stoga_giris_tarihi": "2026-04-22"
+    },
+    {
+        "urun_id": "URN-106",
+        "urun_adi": "Punch Kırlent Kılıfı (Papatya Deseni)",
+        "kategori": "El Sanatları",
+        "stok_miktari": 6,
+        "stok_esigi": 5,
+        "birim_fiyat": 450,
+        "birim": "Adet",
+        "stoga_giris_tarihi": "2026-04-23"
+    },
+    {
+        "urun_id": "URN-107",
+        "urun_adi": "El Dikimi Bez Çanta (Yazlık)",
+        "kategori": "Tekstil",
+        "stok_miktari": 55,
+        "stok_esigi": 15,
+        "birim_fiyat": 200,
+        "birim": "Adet",
+        "stoga_giris_tarihi": "2026-04-29"
+    },
+    {
+        "urun_id": "URN-108",
+        "urun_adi": "Özel Tasarım Denim Çanta",
+        "kategori": "Tekstil",
+        "stok_miktari": 3,
+        "stok_esigi": 5,
+        "birim_fiyat": 850,
+        "birim": "Adet",
+        "stoga_giris_tarihi": "2026-03-21"
+    },
+    {
+        "urun_id": "URN-109",
+        "urun_adi": "El Dikimi Penye Bluz",
+        "kategori": "Tekstil",
+        "stok_miktari": 18,
+        "stok_esigi": 5,
+        "birim_fiyat": 600,
+        "birim": "Adet",
+        "stoga_giris_tarihi": "2026-05-01"
+    },
+    {
+        "urun_id": "URN-110",
+        "urun_adi": "El Örgüsü Yün Kazak",
+        "kategori": "Tekstil",
+        "stok_miktari": 9,
+        "stok_esigi": 3,
+        "birim_fiyat": 1200,
+        "birim": "Adet",
+        "stoga_giris_tarihi": "2026-03-25"
+    },
+    {
+        "urun_id": "URN-111",
+        "urun_adi": "Makrome Duvar Süsü",
+        "kategori": "El Sanatları",
+        "stok_miktari": 14,
+        "stok_esigi": 4,
+        "birim_fiyat": 350,
+        "birim": "Adet",
+        "stoga_giris_tarihi": "2026-03-21"
+    },
+    {
+        "urun_id": "URN-112",
+        "urun_adi": "Seramik Kahve Fincanı",
+        "kategori": "El Sanatları",
+        "stok_miktari": 22,
+        "stok_esigi": 10,
+        "birim_fiyat": 280,
+        "birim": "Adet",
+        "stoga_giris_tarihi": "2026-04-03"
+    },
+    {
+        "urun_id": "URN-113",
+        "urun_adi": "Doğal Bıttım Sabunu",
+        "kategori": "Kişisel Bakım",
+        "stok_miktari": 60,
+        "stok_esigi": 20,
+        "birim_fiyat": 90,
+        "birim": "Adet",
+        "stoga_giris_tarihi": "2026-05-02"
+    },
+    {
+        "urun_id": "URN-114",
+        "urun_adi": "Lavanta Kesesi",
+        "kategori": "El Sanatları",
+        "stok_miktari": 85,
+        "stok_esigi": 20,
+        "birim_fiyat": 50,
+        "birim": "Adet",
+        "stoga_giris_tarihi": "2026-03-31"
+    },
+    {
+        "urun_id": "URN-115",
+        "urun_adi": "El Yapımı Ahşap Tepsi",
+        "kategori": "El Sanatları",
+        "stok_miktari": 7,
+        "stok_esigi": 3,
+        "birim_fiyat": 550,
+        "birim": "Adet",
+        "stoga_giris_tarihi": "2026-04-10"
+    },
+    {
+        "urun_id": "URN-116",
+        "urun_adi": "Organik Cevizli Sucuk",
+        "kategori": "Gıda",
+        "stok_miktari": 30,
+        "stok_esigi": 10,
+        "birim_fiyat": 240,
+        "birim": "KG",
+        "stoga_giris_tarihi": "2026-05-05"
+    },
+    {
+        "urun_id": "URN-117",
+        "urun_adi": "Köy Tereyağı",
+        "kategori": "Gıda",
+        "stok_miktari": 5,
+        "stok_esigi": 10,
+        "birim_fiyat": 410,
+        "birim": "KG",
+        "stoga_giris_tarihi": "2026-05-06"
+    },
+    {
+        "urun_id": "URN-118",
+        "urun_adi": "Geleneksel Salça (Acı)",
+        "kategori": "Gıda",
+        "stok_miktari": 45,
+        "stok_esigi": 15,
+        "birim_fiyat": 190,
+        "birim": "Kavanoz",
+        "stoga_giris_tarihi": "2026-05-02"
+    },
+    {
+        "urun_id": "URN-119",
+        "urun_adi": "Çilek Reçeli",
+        "kategori": "Gıda",
+        "stok_miktari": 28,
+        "stok_esigi": 10,
+        "birim_fiyat": 160,
+        "birim": "Kavanoz",
+        "stoga_giris_tarihi": "2026-04-24"
+    },
+    {
+        "urun_id": "URN-120",
+        "urun_adi": "Amigurumi Oyuncak Bebek",
+        "kategori": "El Sanatları",
+        "stok_miktari": 11,
+        "stok_esigi": 4,
+        "birim_fiyat": 650,
+        "birim": "Adet",
+        "stoga_giris_tarihi": "2026-04-23"
+    },
+    {
+        "urun_id": "URN-121",
+        "urun_adi": "Hasır Sepet",
+        "kategori": "El Sanatları",
+        "stok_miktari": 16,
+        "stok_esigi": 5,
+        "birim_fiyat": 320,
+        "birim": "Adet",
+        "stoga_giris_tarihi": "2026-04-05"
+    },
+    {
+        "urun_id": "URN-122",
+        "urun_adi": "Çini Desenli Tabak",
+        "kategori": "El Sanatları",
+        "stok_miktari": 25,
+        "stok_esigi": 8,
+        "birim_fiyat": 400,
+        "birim": "Adet",
+        "stoga_giris_tarihi": "2026-03-30"
+    },
+    {
+        "urun_id": "URN-123",
+        "urun_adi": "Gül Suyu (Saf)",
+        "kategori": "Kişisel Bakım",
+        "stok_miktari": 35,
+        "stok_esigi": 10,
+        "birim_fiyat": 220,
+        "birim": "Şişe",
+        "stoga_giris_tarihi": "2026-05-06"
+    },
+    {
+        "urun_id": "URN-124",
+        "urun_adi": "Karakovan Balı",
+        "kategori": "Gıda",
+        "stok_miktari": 4,
+        "stok_esigi": 5,
+        "birim_fiyat": 850,
+        "birim": "KG",
+        "stoga_giris_tarihi": "2026-04-02"
+    },
+    {
+        "urun_id": "URN-125",
+        "urun_adi": "İncir Kurusu",
+        "kategori": "Gıda",
+        "stok_miktari": 50,
+        "stok_esigi": 15,
+        "birim_fiyat": 340,
+        "birim": "KG",
+        "stoga_giris_tarihi": "2026-04-25"
+    },
+    {
+        "urun_id": "URN-126",
+        "urun_adi": "El Boyaması İpek Şal",
+        "kategori": "Tekstil",
+        "stok_miktari": 8,
+        "stok_esigi": 3,
+        "birim_fiyat": 950,
+        "birim": "Adet",
+        "stoga_giris_tarihi": "2026-03-23"
+    },
+    {
+        "urun_id": "URN-127",
+        "urun_adi": "Deri Cüzdan (El Yapımı)",
+        "kategori": "Tekstil",
+        "stok_miktari": 12,
+        "stok_esigi": 5,
+        "birim_fiyat": 580,
+        "birim": "Adet",
+        "stoga_giris_tarihi": "2026-03-27"
+    },
+    {
+        "urun_id": "URN-128",
+        "urun_adi": "Doğal Balmumu Mum",
+        "kategori": "El Sanatları",
+        "stok_miktari": 40,
+        "stok_esigi": 10,
+        "birim_fiyat": 150,
+        "birim": "Adet",
+        "stoga_giris_tarihi": "2026-03-24"
+    },
+    {
+        "urun_id": "URN-129",
+        "urun_adi": "Kantaron Yağı",
+        "kategori": "Kişisel Bakım",
+        "stok_miktari": 18,
+        "stok_esigi": 5,
+        "birim_fiyat": 270,
+        "birim": "Şişe",
+        "stoga_giris_tarihi": "2026-04-03"
+    }
+]
