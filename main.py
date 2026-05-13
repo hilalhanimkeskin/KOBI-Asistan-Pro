@@ -24,6 +24,9 @@ app.add_middleware(
     allow_headers=["*"], # Tüm başlıklara izin verir
 )
 
+STOK_DOSYASI = "data/stoklar.json"
+SATIS_DOSYASI = "data/satis_guncel.csv"
+KARGO_DOSYASI = "data/kargo_tarihli.csv"
 
 def riski_veritabanina_kaydet(musteri, mesaj, analiz):
     zaman = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -34,13 +37,13 @@ def riski_veritabanina_kaydet(musteri, mesaj, analiz):
 
 @app.get("/")
 async def ana_sayfa():
-    return {"mesaj": "Smart-Flow API Aktif!"}
+    return {"mesaj": "MERGEN API Aktif!"}
 
 
 @app.post("/mesaj-analiz")
 async def analiz_et(mesaj: str, musteri_adi: str = "Bilinmeyen Müşteri"):
     try:
-        with open("stoklar.json", "r", encoding="utf-8") as f:
+        with open(STOK_DOSYASI, "r", encoding="utf-8") as f:
             stok_rehberi = f.read()
     except:
         stok_rehberi = "Stok bilgisi şu an yüklenemedi."
@@ -78,7 +81,7 @@ import csv
 @app.get("/kargo-sorgula/{satis_id}")
 async def kargo_sorgula(satis_id: str):
     try:
-        with open("kargo_tarihli.csv", mode="r", encoding="utf-8") as f:
+        with open(KARGO_DOSYASI, mode="r", encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 if row["satis_id"] == satis_id:
@@ -100,7 +103,7 @@ import json
 @app.get("/stok-durumu")
 async def stok_listele():
     try:
-        with open("stoklar.json", "r", encoding="utf-8") as f:
+        with open(STOK_DOSYASI, "r", encoding="utf-8") as f:
             veri = json.load(f)
 
 
@@ -120,11 +123,11 @@ async def stok_listele():
 async def satis_tahmini_yap():
     try:
         # 1. Satış geçmişini oku (Sadece son satırları veya özeti almak yeterli)
-        with open("satis_guncel.csv", mode="r", encoding="utf-8") as f:
+        with open(SATIS_DOSYASI, mode="r", encoding="utf-8") as f:
             satis_verisi = f.read()[:2000]  # Çok uzunsa ilk 2000 karakteri alalım
 
         # 2. Stok durumunu oku
-        with open("stoklar.json", "r", encoding="utf-8") as f:
+        with open(STOK_DOSYASI, "r", encoding="utf-8") as f:
             stok_durumu = f.read()
 
         # 3. Gemini'ye analiz yaptır
