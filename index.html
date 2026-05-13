@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MERGEN | Akıllı KOBİ Ekosistemi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f1015; }
+        ::-webkit-scrollbar-thumb { background: #1a1b26; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #e81cff; }
+        html { scroll-behavior: smooth; }
+        .risk-glow { box-shadow: 0 0 15px rgba(112, 26, 53, 0.4); border: 1px solid #701a35 !important; }
+    </style>
+</head>
+<body class="bg-[#0f1015] text-gray-200 min-h-screen flex font-sans">
+
+    <aside class="w-64 bg-[#1a1b26] border-r border-gray-800 flex flex-col sticky top-0 h-screen z-20">
+        <div class="h-20 flex flex-col items-center justify-center border-b border-gray-800 bg-[#14151f]">
+            <h1 class="text-[#e81cff] font-black text-2xl tracking-[0.2em]">MERGEN</h1>
+            <span class="text-[10px] text-gray-500 tracking-widest uppercase">Akıllı Karar Destek</span>
+        </div>
+        <nav class="flex-1 p-4 space-y-2 mt-4">
+            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#0f1015] text-[#e81cff] border border-[#e81cff]/20 shadow-lg">
+                <span class="text-sm font-bold">🏠 Dashboard</span>
+            </a>
+            <a href="#stok-paneli" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#0f1015] transition-all text-gray-400 hover:text-white">
+                <span class="text-sm">📦 Stok Yönetimi</span>
+            </a>
+            <a href="#ai-analiz-paneli" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#0f1015] transition-all text-gray-400 hover:text-white">
+                <span class="text-sm">🤖 AI Müşteri Analizi</span>
+            </a>
+            <div class="pt-4 border-t border-gray-800 mt-4">
+                <button onclick="satisTahminiAl()" class="w-full bg-gradient-to-r from-[#e81cff] to-[#701a35] text-white py-3 rounded-lg font-bold text-xs uppercase tracking-wider hover:scale-[1.02] transition-transform shadow-lg shadow-[#e81cff]/10">
+                    📈 Satış Tahmini Üret
+                </button>
+            </div>
+        </nav>
+        <div class="p-4 border-t border-gray-800">
+            <div class="flex items-center gap-2 text-[10px] text-green-500 font-bold uppercase animate-pulse">
+                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                Gemini Engine Aktif
+            </div>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col min-w-0">
+        <header class="h-16 bg-[#1a1b26]/80 backdrop-blur-md border-b border-gray-800 flex items-center justify-between px-8 sticky top-0 z-10">
+            <h2 class="text-sm font-medium text-gray-400 tracking-wide uppercase">Yönetim Paneli <span class="text-gray-600 mx-2">/</span> <span class="text-white">Genel Bakış</span></h2>
+            <div class="flex items-center gap-6">
+                <div id="kargo-durum" class="text-right border-r border-gray-800 pr-6 hidden md:block">
+                    <p class="text-[10px] text-gray-500 uppercase">Aktif Teslimat</p>
+                    <p class="text-sm font-bold text-white">5 Sipariş Yolda</p>
+                </div>
+                <div class="w-10 h-10 bg-[#e81cff] rounded-lg flex items-center justify-center font-bold text-white shadow-lg">AD</div>
+            </div>
+        </header>
+
+        <main class="p-8 space-y-8 overflow-y-auto">
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-[#1a1b26] p-5 rounded-xl border border-gray-800 relative overflow-hidden">
+                    <h3 class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Toplam Ürün</h3>
+                    <p id="toplam-urun-sayisi" class="text-3xl font-black mt-2 text-white">0</p>
+                    <div class="absolute -right-2 -bottom-2 opacity-10 text-6?l font-black text-white">JSON</div>
+                </div>
+                <div class="bg-[#1a1b26] p-5 rounded-xl border border-[#701a35]/50 relative overflow-hidden">
+                    <h3 class="text-[10px] text-[#ff4d4d] uppercase font-bold tracking-widest">Kritik Stok</h3>
+                    <p id="kritik-stok-sayisi" class="text-3xl font-black mt-2 text-[#ff4d4d]">0</p>
+                    <div class="absolute right-0 top-0 h-full w-1 bg-[#701a35]"></div>
+                </div>
+                <div class="bg-[#1a1b26] p-5 rounded-xl border border-gray-800 relative">
+                    <h3 class="text-[10px] text-[#e81cff] uppercase font-bold tracking-widest">Haftalık Trend</h3>
+                    <p class="text-3xl font-black mt-2 text-[#e81cff]">+%12.4</p>
+                </div>
+                <div class="bg-[#1a1b26] p-5 rounded-xl border border-gray-800">
+                    <h3 class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Risk Skoru</h3>
+                    <p id="risk-skoru" class="text-3xl font-black mt-2 text-green-500">Güvenli</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                <section id="stok-paneli" class="bg-[#1a1b26] p-6 rounded-2xl border border-gray-800 shadow-2xl">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-bold text-white tracking-tight">📦 Stok Durumu (Gerçek Zamanlı)</h3>
+                        <button onclick="verileriGuncelle()" class="text-[10px] text-[#e81cff] hover:underline uppercase font-bold">Verileri Yenile</button>
+                    </div>
+                    <div class="overflow-x-auto rounded-lg bg-[#0f1015]/50 p-2">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="text-gray-500 border-b border-gray-800">
+                                    <th class="py-3 px-2">ID</th>
+                                    <th class="py-3">ÜRÜN ADI</th>
+                                    <th class="py-3 text-center">STOK</th>
+                                    <th class="py-3">DURUM</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stok-tablo-govdesi" class="divide-y divide-gray-800/40">
+                                </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="ai-analiz-paneli" class="bg-[#1a1b26] p-6 rounded-2xl border border-gray-800 shadow-2xl flex flex-col">
+                    <div class="mb-6">
+                        <h3 class="text-lg font-bold text-white tracking-tight">🤖 MERGEN AI Müşteri Asistanı</h3>
+                        <p class="text-xs text-gray-500 mt-1 italic">Müşteri mesajlarını analiz eder, risk tespiti yapar ve yanıt üretir.</p>
+                    </div>
+                    <div class="flex-1 flex flex-col gap-4">
+                        <div class="bg-[#0f1015] p-5 rounded-xl border border-gray-800">
+                            <input type="text" id="musteri-adi" placeholder="Müşteri Adı..." class="w-full bg-transparent border-b border-gray-800 mb-4 p-2 text-sm focus:border-[#e81cff] outline-none text-white">
+                            <textarea id="ai-soru" rows="4" placeholder="Müşteri mesajını buraya yapıştırın (Örn: Kargom gelmedi, dava açacağım!)" class="w-full bg-transparent border border-gray-800 rounded-xl p-4 text-sm focus:border-[#e81cff] outline-none text-gray-300 transition-all"></textarea>
+                            <button onclick="aiSoruSor()" class="mt-4 w-full bg-[#e81cff] text-white py-4 rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-opacity-80 transition-all shadow-lg shadow-[#e81cff]/10">
+                                Analizi Başlat
+                            </button>
+                        </div>
+                        
+                        <div id="ai-cevap-alani" class="hidden p-5 rounded-xl border transition-all duration-500">
+                            <div class="flex items-center justify-between mb-3">
+                                <span id="durum-etiketi" class="text-[10px] font-black uppercase px-2 py-1 rounded"></span>
+                                <span class="text-[10px] text-gray-500">AI Analiz Sonucu</span>
+                            </div>
+                            <p id="ai-cevap-metni" class="text-sm text-gray-200 leading-relaxed"></p>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const API_URL = "http://127.0.0.1:8000";
+
+        // 1. Stokları ve Özet Verileri Güncelle
+        async function verileriGuncelle() {
+            try {
+                const response = await fetch(`${API_URL}/stok-durumu`);
+                const stoklar = await response.json();
+                const tabloGovdesi = document.getElementById('stok-tablo-govdesi');
+                tabloGovdesi.innerHTML = ''; 
+
+                let kritikSayac = 0;
+                stoklar.forEach(urun => {
+                    const isKritik = urun.durum === 'KRİTİK';
+                    if(isKritik) kritikSayac++;
+
+                    const durumClass = isKritik 
+                        ? "text-[#ff4d4d] bg-[#701a35]/20 border-[#701a35]/40" 
+                        : "text-green-400 bg-green-900/10 border-green-900/30";
+                    
+                    const satir = `
+                        <tr class="hover:bg-white/5 transition-colors border-b border-gray-800/30">
+                            <td class="py-4 px-2 text-[10px] text-gray-600 font-mono">${urun.urun_id || 'PRD-X'}</td>
+                            <td class="py-4 font-medium text-gray-200">${urun.urun_adi}</td>
+                            <td class="py-4 text-center font-bold text-[#e81cff]">${urun.stok_miktari}</td>
+                            <td class="py-4">
+                                <span class="px-3 py-1 border rounded-full text-[9px] font-black uppercase tracking-widest ${durumClass}">
+                                    ${urun.durum}
+                                </span>
+                            </td>
+                        </tr>
+                    `;
+                    tabloGovdesi.innerHTML += satir;
+                });
+
+                document.getElementById('toplam-urun-sayisi').innerText = stoklar.length;
+                document.getElementById('kritik-stok-sayisi').innerText = kritikSayac;
+
+            } catch (error) {
+                console.error("Backend bağlantısı yok!", error);
+            }
+        }
+
+        // 2. AI Mesaj Analizi (PDF: Hukuki Risk Tespiti)
+        async function aiSoruSor() {
+            const soru = document.getElementById('ai-soru').value;
+            const isim = document.getElementById('musteri-adi').value || "Müşteri";
+            const cevapAlani = document.getElementById('ai-cevap-alani');
+            const cevapMetni = document.getElementById('ai-cevap-metni');
+            const durumEtiketi = document.getElementById('durum-etiketi');
+            const riskSkoru = document.getElementById('risk-skoru');
+
+            if(!soru) return alert("Analiz için bir mesaj girin.");
+
+            cevapAlani.classList.remove('hidden');
+            cevapMetni.innerHTML = `<span class="animate-pulse text-gray-500">Mergen AI veriyi işliyor...</span>`;
+
+            try {
+                const res = await fetch(`${API_URL}/mesaj-analiz?mesaj=${encodeURIComponent(soru)}&musteri_adi=${encodeURIComponent(isim)}`, {
+                    method: 'POST'
+                });
+                const data = await res.json();
+                
+                cevapMetni.innerText = data.cevap;
+
+                if(data.durum === "RISKLI") {
+                    cevapAlani.className = "p-5 rounded-xl border bg-[#701a35]/10 border-[#701a35] risk-glow";
+                    durumEtiketi.innerText = "🚨 YÜKSEK RİSK / HUKUKİ TEHDİT";
+                    durumEtiketi.className = "text-[10px] font-black uppercase px-2 py-1 rounded bg-[#701a35] text-white";
+                    riskSkoru.innerText = "KRİTİK";
+                    riskSkoru.className = "text-3xl font-black mt-2 text-[#ff4d4d]";
+                } else {
+                    cevapAlani.className = "p-5 rounded-xl border bg-[#0f1015] border-[#e81cff]/30";
+                    durumEtiketi.innerText = "✅ GÜVENLİ / BİLGİ TALEBİ";
+                    durumEtiketi.className = "text-[10px] font-black uppercase px-2 py-1 rounded bg-[#e81cff] text-black";
+                    riskSkoru.innerText = "GÜVENLİ";
+                    riskSkoru.className = "text-3xl font-black mt-2 text-green-500";
+                }
+            } catch (e) {
+                cevapMetni.innerText = "Sunucu bağlantı hatası!";
+            }
+        }
+
+        // 3. Satış Tahminleme (PDF: Proaktif Karar Mekanizması)
+        async function satisTahminiAl() {
+            try {
+                const response = await fetch(`${API_URL}/satis-tahminleme`);
+                const data = await response.json();
+                alert("MERGEN AI STRATEJİ RAPORU:\n\n" + data.analiz);
+            } catch (error) {
+                alert("Rapor üretim hatası!");
+            }
+        }
+
+        // Başlangıçta verileri çek
+        window.onload = verileriGuncelle;
+    </script>
+</body>
+</html>
