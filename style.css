@@ -1,0 +1,9 @@
+/* Scrollbar'ı gizlemek ama kaydırmaya izin vermek için */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 10px;
+}
