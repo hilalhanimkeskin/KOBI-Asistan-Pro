@@ -1,154 +1,141 @@
 import os
+import csv
+import json
+import datetime
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import google.generativeai as genai
-import datetime
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 
-# NOT: Çalıştırmadan önce .env dosyası oluşturup içine
-# GEMINI_API_KEY=xxx şeklinde anahtarınızı eklemeyi unutmayın!
-
+# .env dosyasındaki değişkenleri yükler
 load_dotenv()
-api_key = os.getenv("GEMINI_API_KEY")
+
 # 1. Yapılandırma
-genai.configure(api_key=api_key)
-model = genai.GenerativeModel(model_name='gemini-3.1-flash-lite')
+API_KEY = os.getenv("GEMINI_API_KEY")
+genai.configure(api_key=API_KEY)
+
+# Modül seçimi
+model = genai.GenerativeModel(model_name='gemini-1.5-flash')
 
 app = FastAPI()
 
+# CORS Ayarları: Frontend'in erişimi için
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Tüm dış bağlantılara izin verir
+    allow_origins=["*"], 
     allow_credentials=True,
-    allow_methods=["*"], # GET, POST vb. tüm metodlara izin verir
-    allow_headers=["*"], # Tüm başlıklara izin verir
+    allow_methods=["*"], 
+    allow_headers=["*"],
 )
 
-STOK_DOSYASI = "data/stoklar_tarihli.json"
-SATIS_DOSYASI = "data/satis_guncel.csv"
-KARGO_DOSYASI = "data/kargo_tarihli.csv"
-
 def riski_veritabanina_kaydet(musteri, mesaj, analiz):
+    """Hukuki risk içeren görüşmeleri yerel bir dosyaya loglar."""
     zaman = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     kayit_metni = f"TARİH: {zaman} | MÜŞTERİ: {musteri}\nMESAJ: {mesaj}\nANALİZ: {analiz}\n" + "-"*30 + "\n"
-
     with open("riskli_kayitlar.txt", "a", encoding="utf-8") as f:
         f.write(kayit_metni)
 
 @app.get("/")
 async def ana_sayfa():
-    return {"mesaj": "MERGEN API Aktif!"}
+    return {"mesaj": "MERGEN AI API Aktif!"}
 
+import json # Dosyanın en üstünde olduğundan emin ol
 
 @app.post("/mesaj-analiz")
 async def analiz_et(mesaj: str, musteri_adi: str = "Bilinmeyen Müşteri"):
     try:
-        with open(STOK_DOSYASI, "r", encoding="utf-8") as f:
+        # Yedek Kontrol: Gemini hata yaparsa diye manuel kontrol
+        riskli_kelimeler = ["mahkeme", "dava", "avukat", "iade", "dolandırıcı", "şikayet", "tüketici hakları"]
+        manuel_risk = any(kelime in mesaj.lower() for kelime in riskli_kelimeler)
+
+        with open("stoklar.json", "r", encoding="utf-8") as f:
             stok_rehberi = f.read()
-    except:
-        stok_rehberi = "Stok bilgisi şu an yüklenemedi."
 
-    prompt = f"""
-    Sen profesyonel bir KOBİ asistanısın[cite: 2]. Güncel Ürün Listemiz ve Stoklarımız:
-    {stok_rehberi}
+        prompt = f"""
+        SİSTEM: MERGEN AI. 
+        GÖREV: Mesajı analiz et ve sadece JSON dön.
+        STOKLAR: {stok_rehberi}
+        MESAJ: {mesaj}
 
-    Müşteri ({musteri_adi}) şunu sordu: '{mesaj}'
+        JSON FORMATI ŞU OLSUN (SADECE JSON):
+        {{
+            "durum": "RISKLI" veya "NORMAL",
+            "cevap": "cevabın",
+            "risk_skoru": "0-100"
+        }}
+        """
 
-    GÖREVLERİN:
-    1. Hukuki RISK varsa (tehdit, dava vb.): Sadece 'RISK' yaz ve not ekle.
-    2. Stokta olan bir ürün soruluyorsa: Fiyat ve stok bilgisi vererek nazikçe cevapla.
-    3. Stokta yoksa: Alternatif bir ürün öner (Örn: Zeytinyağı yoksa Ayçiçek yağı gibi).
-    4. Kargo soruluyorsa: 'KARGO: [Sipariş No]' formatını kullan.
-    Cevabın başına 'AUTO:' koy.
-    """
-
-    try:
         response = model.generate_content(prompt)
-        analiz_sonucu = response.text
+        text_response = response.text.strip()
+        
+        # Markdown temizleme
+        if "```json" in text_response:
+            text_response = text_response.split("```json")[1].split("```")[0].strip()
+        elif "```" in text_response:
+            text_response = text_response.split("```")[1].strip()
 
-        if "RISK" in analiz_sonucu:
-            riski_veritabanina_kaydet(musteri_adi,mesaj, analiz_sonucu)
-            return {"durum": "RISKLI", "aksiyon": "Satıcıya Yönlendirildi", "cevap": "Hukuki inceleme gerekiyor."}
-        else:
-            return {"durum": "NORMAL", "aksiyon": "Otomatik Cevap", "cevap": analiz_sonucu.replace("AUTO:", "").strip()}
+        try:
+            data = json.loads(text_response)
+        except:
+            # Eğer Gemini JSON dönmeyi beceremezse manuel kontrol devreye girsin
+            data = {
+                "durum": "RISKLI" if manuel_risk else "NORMAL",
+                "cevap": "Mesajınız sistem tarafından inceleniyor. Müşteri temsilcimiz size dönecektir." if manuel_risk else "Mesajınız alındı.",
+                "risk_skoru": "95" if manuel_risk else "10"
+            }
+
+        # Eğer manuel kontrol risk bulduysa ama Gemini bulamadıysa yine de RISKLI yap
+        if manuel_risk:
+            data["durum"] = "RISKLI"
+            if data["risk_skoru"] == "10": data["risk_skoru"] = "90"
+
+        if data["durum"] == "RISKLI":
+            riski_veritabanina_kaydet(musteri_adi, mesaj, data["cevap"])
+        
+        return data
+
     except Exception as e:
-        return {"hata": str(e),
-                "ipucu": "Eger 404 aliyorsan terminale 'pip install --upgrade google-generativeai' yazmalisin."}
-
-
-import csv
-
-@app.get("/kargo-sorgula/{satis_id}")
-async def kargo_sorgula(satis_id: str):
-    try:
-        with open(KARGO_DOSYASI, mode="r", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                if row["satis_id"] == satis_id:
-                    return {
-                        "siparis_no": row["satis_id"],
-                        "alici": row["alici_adi"],
-                        "durum": row["kargo_durumu"],
-                        "nereden_nereye": f"Depo -> {row['sehir']}",
-                        "tarih": row["kargoya_verilis_tarihi"]
-                    }
-        return {"hata": "Bu sipariş numarasına ait kargo bulunamadı."}
-    except FileNotFoundError:
-        return {"hata": "Kargo veri dosyası bulunamadı!"}
-
-
-import json
-
+        # En kötü durumda bile hata verme, manuel kontrolü kullan
+        return {
+            "durum": "RISKLI" if manuel_risk else "NORMAL", 
+            "cevap": "Teknik inceleme gerekiyor.", 
+            "risk_skoru": "85"
+        }
 
 @app.get("/stok-durumu")
 async def stok_listele():
     try:
-        with open(STOK_DOSYASI, "r", encoding="utf-8") as f:
+        with open("stoklar.json", "r", encoding="utf-8") as f:
             veri = json.load(f)
 
-
+        # Frontend'in beklediği 'durum' ve anahtarları kontrol et
         for urun in veri:
             stok_miktari = urun.get("stok_miktari", 0)
             stok_esigi = urun.get("stok_esigi", 10)
             urun["durum"] = "KRİTİK" if stok_miktari < stok_esigi else "NORMAL"
-
+            # Frontend urun_id bekliyor, eğer dosyada 'id' varsa eşitle
+            if "id" in urun and "urun_id" not in urun:
+                urun["urun_id"] = urun["id"]
+        
         return veri
-    except FileNotFoundError:
-        return {"hata": "stoklar.json dosyası bulunamadı."}
     except Exception as e:
-        return {"hata": f"Bir hata oluştu: {str(e)}"}
-
+        return [{"urun_id": "HATA", "urun_adi": str(e), "stok_miktari": 0, "durum": "KRİTİK"}]
 
 @app.get("/satis-tahminleme")
 async def satis_tahmini_yap():
     try:
-        # 1. Satış geçmişini oku (Sadece son satırları veya özeti almak yeterli)
-        with open(SATIS_DOSYASI, mode="r", encoding="utf-8") as f:
-            satis_verisi = f.read()[:2000]  # Çok uzunsa ilk 2000 karakteri alalım
+        # Verileri oku (Hata almamak için kontrol ekledik)
+        satis_verisi = "Satış verisi bulunamadı."
+        if os.path.exists("satis_guncel.csv"):
+            with open("satis_guncel.csv", mode="r", encoding="utf-8") as f:
+                satis_verisi = f.read()[:1500]
 
-        # 2. Stok durumunu oku
-        with open(STOK_DOSYASI, "r", encoding="utf-8") as f:
-            stok_durumu = f.read()
-
-        # 3. Gemini'ye analiz yaptır
-        prompt = f"""
-        Sen bir veri analistisin. Aşağıdaki satış geçmişine ve mevcut stoklara bak:
-
-        SATIŞ GEÇMİŞİ (CSV):
-        {satis_verisi}
-
-        MEVCUT STOKLAR (JSON):
-        {stok_durumu}
-
-        GÖREVİN: 
-        1. En çok satan 3 ürün grubunu belirle.
-        2. Satış hızına bakarak, gelecek hafta stoku bitebilecek kritik ürünleri tahmin et.
-        3. KOBİ sahibine 'Şu üründen stok miktarını artırmalısın' şeklinde tavsiye ver.
-        Cevabını profesyonel bir rapor şeklinde hazırla.
-        """
-
+        prompt = f"Aşağıdaki satış verilerini analiz et ve KOBİ sahibine gelecek hafta için kısa bir strateji ver: {satis_verisi}"
         response = model.generate_content(prompt)
         return {"analiz": response.text}
-
     except Exception as e:
-        return {"hata": f"Tahminleme sırasında bir sorun oluştu: {str(e)}"}
+        return {"analiz": "Tahminleme şu an yapılamıyor."}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000)
