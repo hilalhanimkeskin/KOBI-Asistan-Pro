@@ -24,7 +24,7 @@ app.add_middleware(
     allow_headers=["*"], # Tüm başlıklara izin verir
 )
 
-STOK_DOSYASI = "data/stoklar.json"
+STOK_DOSYASI = "data/stoklar_tarihli.json"
 SATIS_DOSYASI = "data/satis_guncel.csv"
 KARGO_DOSYASI = "data/kargo_tarihli.csv"
 
